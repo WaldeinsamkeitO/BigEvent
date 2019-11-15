@@ -37,7 +37,70 @@
       </form>
     </div>
   </div>
+  <!-- 使用bootstrap模板制作弹出框 -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Tips</h4>
+        </div>
+        <div class="modal-body">
 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="./libs/http.js"></script>
+  <script>
+    $(function () {
+      $('.input_sub').on('click', function (e) {
+        e = e || window.event;
+        e.preventDefault();
+        var username = $('.input_txt').val().trim();
+        var password = $('.input_pass').val().trim();
+        if (username == '' || password == '') {
+          $('#myModal').modal();
+          $('.modal-body').text('用户名及密码不能为空');
+          return false;
+        };
+        $.ajax({
+          type: 'post',
+          url: BigNew.user_login,
+          data: {
+            username: username,
+            password: password
+          },
+          success: function (backData) {
+            $('#myModal').modal();
+            $('.modal-body').text(backData.msg);
+            if (backData.code == 200) {
+              $('#myModal').on('hidden.bs.modal', function () {
+                  window.localStorage.setItem('token',backData.token);
+                  window.location.href = './index.html'
+              })
+            }
+          }
+        })
+
+      })
+
+    })
+
+
+
+
+
+
+
+  </script>
 </body>
 
 </html>
