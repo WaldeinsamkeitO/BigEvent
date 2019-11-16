@@ -25,20 +25,20 @@
         </div>
         <!-- 左侧导航栏 -->
         <div class="menu">
-            <div class="level01 active"><a href="#" target="main_frame"><i
+            <div class="level01 active"><a href="./main_count.html" target="myiframe"><i
                         class="iconfont icon-yidiandiantubiao04"></i><span>首页</span></a></div>
             <div class="level01"><a href="#"><i class="iconfont icon-icon-article"></i><span>文章管理</span><b
                         class="iconfont icon-arrowdownl"></b></a></div>
             <ul class="level02">
-                <li><a href="#" target="main_frame"><i class="iconfont icon-previewright"></i><span>文章列表</span></a></li>
-                <li><a href="#" target="main_frame"><i class="iconfont icon-previewright"></i><span>发表文章</span></a></li>
-                <li><a href="#" target="main_frame"><i class="iconfont icon-previewright"></i><span>文章类别管理</span></a>
+                <li><a href="./article_list.html" target="myiframe"><i class="iconfont icon-previewright"></i><span>文章列表</span></a></li>
+                <li><a href="./article_release.html" target="myiframe"><i class="iconfont icon-previewright"></i><span>发表文章</span></a></li>
+                <li><a href="./article_category.html" target="myiframe"><i class="iconfont icon-previewright"></i><span>文章类别管理</span></a>
                 </li>
             </ul>
 
-            <div class="level01"><a href="#" target="main_frame"><i
+            <div class="level01"><a href="./comment_list.html" target="myiframe"><i
                         class="iconfont icon-comment"></i><span>评论管理</span></a></div>
-            <div class="level01" id="user"><a href="#" target="main_frame"><i
+            <div class="level01" id="user"><a href="./user.html" target="myiframe"><i
                         class="iconfont icon-user"></i><span>个人中心</span></a></div>
         </div>
         <!-- 顶部栏 -->
@@ -51,28 +51,47 @@
         </div>
         <!-- 右侧主体内容 -->
         <div class="main" id="main_body">
-
+            <iframe src="./main_count.html" frameborder="0" name="myiframe" style="width: 100%; height: 100%;"></iframe>
         </div>
     </div>
     <script src="./libs/http.js"></script>
     <script>
         $(function () {
+            //进入首页发送ajax请求
             $.ajax({
-                type:'get',
+                type: 'get',
                 url: BigNew.user_info,
-                success:function(backData){
-                    $('.user_info img').attr('src',backData.data.userPic);
+                success: function (backData) {
+                    $('.user_info img').attr('src', backData.data.userPic);
                     $('.user_info i').text(backData.data.nickname);
-                    $('.user_center_link img').attr('src',backData.data.userPic);
+                    $('.user_center_link img').attr('src', backData.data.userPic);
                 }
             })
+            //注册登出事件
+            $('.logout').on('click', function () {
+                window.localStorage.removeItem('token');
+                window.location.href = './login.html';
+            })
+            //注册右边栏点击事件
+            $('.level01').on('click',function(){
+                $(this).addClass('active').siblings('div').removeClass('active');
+                if($(this).index() == 1){
+                    $(this).next().slideToggle();
+                    //点击文章管理按钮直接默认第一栏li
+                    $('.level02>li>a')[0].click();
+                    //DOM元素的click事件可以出发事件,也可以触发该标签里面的链接
+                    //改变文章管理标签的类名,给右侧箭头的旋转
+                    $(this).find('b').toggleClass('rotate0');
+                }
+            })
+            //注册左边li标签点击
+            $('.level02 li').on('click',function(){
+                $(this).addClass('active').siblings('li').removeClass('active');
+
+            })
+
         })
 
-        //注册登出事件
-        $('.logout').on('click',function(){
-            window.localStorage.removeItem('token');
-            window.location.href = './login.html';
-        })
 
 
     </script>
