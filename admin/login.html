@@ -61,6 +61,21 @@
   <script src="./libs/http.js"></script>
   <script>
     $(function () {
+
+      // if (window.history && window.history.pushState) {
+      //   window.onpopstate = function () {
+      //     window.location.reload();
+      //   }
+      // }
+      // $(document).ready(function () {
+      //   if ($.cookie("user") == null) {
+      //     alert("11111111111111");
+      //   }
+      //   else {
+      //   }
+      //   $.cookie("user", "1");
+      // });
+
       $('.input_sub').on('click', function (e) {
         e = e || window.event;
         e.preventDefault();
@@ -83,8 +98,8 @@
             $('.modal-body').text(backData.msg);
             if (backData.code == 200) {
               $('#myModal').on('hidden.bs.modal', function () {
-                  window.localStorage.setItem('token',backData.token);
-                  window.location.href = './index.html'
+                window.localStorage.setItem('token', backData.token);
+                window.location.href = './index.html'
               })
             }
           }

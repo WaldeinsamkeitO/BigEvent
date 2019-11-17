@@ -106,13 +106,11 @@
           $('tbody').html(resHtml);
         }
       })
-
       //判定点击按钮确定弹出框的内容
       $('#xinzengfenlei').on('click', function () {
         $('#exampleModalLabel').text('新增分类');
         $('#add_act').text('Add');
-        $('#add_act').removeClass('btn-primary').addClass('btn-success')
-
+        $('#add_act').removeClass('btn-primary').addClass('btn-success');
       })
       //编辑按钮注册
       $('tbody').on('click', '#ed_act', function () {
@@ -120,8 +118,6 @@
         $('#add_act').text('Edit');
         $('#add_act').removeClass('btn-success').addClass('btn-primary');
         var id = $(this).attr('data-id');
-       
-
         //点击编辑按钮的请求
         $.ajax({
           url: BigNew.category_search,
@@ -170,45 +166,32 @@
               type: 'post',
               url: BigNew.category_edit,
               data: {
-                id:edid,
-                name:edname,
-                slug:edslug,
+                id: edid,
+                name: edname,
+                slug: edslug,
               },
-              success: function(backData){
+              success: function (backData) {
                 window.location.reload();
               }
             })
         }
       })
-
       //删除按钮事件
-
-      $('tbody').on('click','#act_del',function(e){
+      $('tbody').on('click', '#act_del', function (e) {
         e.preventDefault();
-        var id = $(this).attr('data-id')
-        console.log(id);
-  
+        var id = $(this).attr('data-id');
         $.ajax({
-          type:'post',
-          url:BigNew.category_delete,
-          data:{
-            id:id,
+          type: 'post',
+          url: BigNew.category_delete,
+          data: {
+            id: id,
           },
-          success:function(backData){
+          success: function (backData) {
             window.location.reload();
           }
         })
-
-
-
       })
-
-
     })
-
-
-
-
   </script>
 
 </html>

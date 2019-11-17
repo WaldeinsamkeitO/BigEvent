@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <META content=no-cache http-equiv=Pragma>
+    <META HTTP-EQUIV=Expires Content=0>
     <title>大事件-后台首页</title>
     <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/reset.css">
@@ -30,9 +33,12 @@
             <div class="level01"><a href="#"><i class="iconfont icon-icon-article"></i><span>文章管理</span><b
                         class="iconfont icon-arrowdownl"></b></a></div>
             <ul class="level02">
-                <li><a href="./article_list.html" target="myiframe"><i class="iconfont icon-previewright"></i><span>文章列表</span></a></li>
-                <li><a href="./article_release.html" target="myiframe"><i class="iconfont icon-previewright"></i><span>发表文章</span></a></li>
-                <li><a href="./article_category.html" target="myiframe"><i class="iconfont icon-previewright"></i><span>文章类别管理</span></a>
+                <li><a href="./article_list.html" target="myiframe"><i
+                            class="iconfont icon-previewright"></i><span>文章列表</span></a></li>
+                <li><a href="./article_release.html" target="myiframe"><i
+                            class="iconfont icon-previewright"></i><span>发表文章</span></a></li>
+                <li><a href="./article_category.html" target="myiframe"><i
+                            class="iconfont icon-previewright"></i><span>文章类别管理</span></a>
                 </li>
             </ul>
 
@@ -56,26 +62,33 @@
     </div>
     <script src="./libs/http.js"></script>
     <script>
+
         $(function () {
+            getData();
+            if(window.localStorage.token == undefined){
+                window.location.href = './login.html'
+            }
             //进入首页发送ajax请求
-            $.ajax({
-                type: 'get',
-                url: BigNew.user_info,
-                success: function (backData) {
-                    $('.user_info img').attr('src', backData.data.userPic);
-                    $('.user_info i').text(backData.data.nickname);
-                    $('.user_center_link img').attr('src', backData.data.userPic);
-                }
-            })
+            function getData(){
+                $.ajax({
+                    type: 'get',
+                    url: BigNew.user_info,
+                    success: function (backData) {
+                        $('.user_info img').attr('src', backData.data.userPic);
+                        $('.user_info i').text(backData.data.nickname);
+                        $('.user_center_link img').attr('src', backData.data.userPic);
+                    }
+                });
+            }
             //注册登出事件
             $('.logout').on('click', function () {
                 window.localStorage.removeItem('token');
                 window.location.href = './login.html';
             })
             //注册右边栏点击事件
-            $('.level01').on('click',function(){
+            $('.level01').on('click', function () {
                 $(this).addClass('active').siblings('div').removeClass('active');
-                if($(this).index() == 1){
+                if ($(this).index() == 1) {
                     $(this).next().slideToggle();
                     //点击文章管理按钮直接默认第一栏li
                     $('.level02>li>a')[0].click();
@@ -85,7 +98,7 @@
                 }
             })
             //注册左边li标签点击
-            $('.level02 li').on('click',function(){
+            $('.level02 li').on('click', function () {
                 $(this).addClass('active').siblings('li').removeClass('active');
 
             })
