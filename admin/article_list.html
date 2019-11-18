@@ -13,6 +13,7 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 引入模板引擎js文件 -->
     <script src="./libs/template-web.js"></script>
+    <script src="./libs/pagination/jquery.twbsPagination.js"></script>
 </head>
 
 <body>
@@ -69,12 +70,91 @@
                 </tbody>
             </table>
             <div class="row text-center">
+                <ul class="pagination" id="pagination"></ul>
             </div>
         </div>
     </div>
+    <!-- 下拉菜单模板 -->
+    <script id="sel_temp" type="text/html">
+            <option >所有分类</option>
+        {{each data v}}
+            <option value="{{v.id}}">{{v.name}}</option>
+        {{/each}}
+    </script>
+    <!-- 文章列表模板 -->
+    <script id="article_temp" type="text/html">
+        {{each data.data v}}
+        <tr>
+            <td>{{v.title}}</td>
+            <td>{{v.author}}</td>
+            <td>{{v.category}}</td>
+            <td class="text-center">{{v.date}}</td>
+            <td class="text-center">{{v.state}}</td>
+            <td class="text-center">
+                <a href="article_edit.html" data-id="{{v.id}}" class="btn btn-default btn-xs">编辑</a>
+                <a href="javascript:void(0);" data-id="{{v.id}}" class="btn btn-danger btn-xs delete">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+
+    <script src="./libs/http.js"></script>
     <script>
-    
-    
+        $(function () {
+            //获取文章全部分类下拉列表
+            $.ajax({
+                url: BigNew.category_list,
+                success: function (backData) {
+                    
+                    var resHtml = template("sel_temp", backData);
+                    $('#selCategory').html(resHtml);
+                }
+            })
+
+            //调用函数创建模板框架,把获取的文章渲染到页面,并引入页码框架
+            getArticle(1, function (backData) {
+                 $('#pagination').twbsPagination({
+                    totalPages: backData.data.totalPage,
+                    visiblePages: 7,
+                    onPageClick: function (event, page) {
+                        getArticle(page, null);
+                    }
+                })
+            });
+
+            //进入页面开始获取所有文章函数
+            function getArticle(myPage,callback) {
+                $.ajax({
+                    url: BigNew.article_query,
+                    data: {
+                        key: '',
+                        type: $('#selCategory').val().trim(),
+                        state: $('#selStatus').val().trim(),
+                        page: myPage,
+                        perpage: 10,
+                    },
+                    success: function (backData) {
+                        console.log(backData);
+                        
+                        var resHtml = template("article_temp", backData);
+                        $('tbody').html(resHtml);
+                        if (callback != null) {
+                            callback(backData);
+                        }
+                    }
+                })
+            }
+            //筛选事件
+            $('#btnSearch').on('click', function (e) {
+                e.preventDefault();
+
+                getArticle(1,function (backData) {
+                    $('#pagination').twbsPagination('changeTotalPages', backData.data.totalPage,1 );
+                   
+                })
+            })
+        })
+
     </script>
 </body>
 
