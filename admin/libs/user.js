@@ -20,7 +20,6 @@ $(function () {
     })
     //图片预览
     $('#exampleInputFile').on('change',function(){
-        console.log(this.files);
         var url_pic = this.files[0];
         url = URL.createObjectURL(url_pic);
         $('.user_pic').attr('src',url);

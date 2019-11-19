@@ -67,6 +67,7 @@ $(function () {
                         //调用changeTotalPages 这个方法 根据新的总页数 重新生成分页结构. 
                         $('#pagination-demo').twbsPagination('changeTotalPages',
                             backData.data.totalPage, mypage);
+                            console.log(mypage);
                     });
                 }
 
