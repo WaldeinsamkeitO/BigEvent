@@ -56,7 +56,7 @@
     <div class="main_con clearfix">
         <div class="left_con setfr">
             <div class="breadcrumb">
-                当前位置： <a href="#">首页</a> &gt; <a href="#">科技</a> &gt; 文章详情
+                当前位置： <a href="./index.html">首页</a> &gt; <a href="#">科技</a> &gt; 文章详情
             </div>
             <h3 class="article_title">马斯克的新花样？连接人脑和电脑的初创公司又筹了一笔钱</h3>
             <div class="article_info">杰克 发布于 2019-05-08 07:08:46&nbsp;&nbsp;&nbsp;分类: 奇趣事&nbsp;&nbsp;&nbsp;阅读:
@@ -208,6 +208,32 @@
     <!-- 引入模板引擎js文件 -->
     <script src="./js/template-web.js"></script>
     <script src="./js/jquery-1.12.4.min.js"></script>
+    <!-- 创建副标题模板 -->
+    <script id="subheading_temp" type="text/html">
+        {{data.author}} 发布于 {{data.date}}&nbsp;&nbsp;&nbsp;分类: {{data.category}}&nbsp;&nbsp;&nbsp;阅读:
+        ({{data.read}})&nbsp;&nbsp;&nbsp;评论: ({{data.comments}})
+    </script>
+    <script>
+        //进入网页发送ajax请求,获取文章数据
+        var id = window.location.search.split('=')[1];
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/index/article',
+            data: {
+                id: id,
+            },
+            success: function (backData) {
+                $('.article_title').text(backData.data.title);
+                var resHtml = template('subheading_temp', backData);
+                $('.article_info').html(resHtml);
+                $('.article_con').text('文章千古事，得失寸心知。作者皆殊列，名声岂浪垂 骚人嗟不见，汉道盛于斯。前辈飞腾入，馀波绮丽为后贤兼旧列，历代各清规。法自儒家有，心从弱岁疲。');
+            }
+
+        })
+
+
+
+
+    </script>
 
 </body>
 

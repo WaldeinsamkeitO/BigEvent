@@ -29,7 +29,7 @@ $(function () {
                 type: $('#selCategory').val().trim(),
                 state: $('#selStatus').val().trim(),
                 page: myPage,
-                perpage: 10,
+                perpage: 2,
             },
             success: function (backData) {
 
@@ -63,10 +63,11 @@ $(function () {
             success: function (backData) {
                 if (backData.code == 204) {
                     getArticle(mypage, function (backData) {
+                        console.log(backData);
+                        
                         //删除了部分数据,那总页数就有可能发生了改变
                         //调用changeTotalPages 这个方法 根据新的总页数 重新生成分页结构. 
-                        $('#pagination-demo').twbsPagination('changeTotalPages',
-                            backData.data.totalPage, mypage);
+                        $('#pagination-demo').twbsPagination('changeTotalPages',backData.data.totalPage, mypage);
                             console.log(mypage);
                     });
                 }
