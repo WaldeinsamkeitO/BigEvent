@@ -154,13 +154,12 @@
         $.ajax({
             url: 'http://localhost:8080/api/v1/admin/data/article',
             success: function (backData) {
-                console.log(backData);
                 var data = [];
                 var data2 = [];
                 for (let i = 0; i < backData.date.length; i++) {
                     data.push(backData.date[i].count);
                     data2.push(backData.date[i].date);
-                }
+                };
                 var myChart = echarts.init(document.getElementById('curve_show'));
                 option = {
                     animation: false,
@@ -206,11 +205,11 @@
                         type: '日',
                         type: 'category',
                         // boundaryGap: [0, 0],
-                        boundaryGap:false,
+                        boundaryGap: false,
                         splitLine: {
                             show: false
                         },
-                        data:data2
+                        data: data2
                     },
                     yAxis: {
                         type: 'value',
@@ -280,156 +279,142 @@
                 myChart.setOption(option);
             }
         })
-
-
-
     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <!-- 环形图 -->
     <script>
         // 基于准备好的dom，初始化echarts实例
-        var myChart1 = echarts.init(document.getElementById('pie_show'));
-
-        option1 = {
-            title: {
-                left: 'center',
-                text: '分类文章数量比',
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
-            },
-            legend: {
-                orient: 'horizontal',
-                x: 'center',
-                data: ['爱生活', '趣美味', '爱旅行', '爱电影', '爱游泳'],
-                top: 30
-            },
-            color: ['#5885e8', '#13cfd5', '#00ce68', '#ff9565', '#20ff19'],
-            series: [
-                {
-                    name: '分类名称',
-                    type: 'pie',
-                    radius: ['50%', '70%'],
-                    avoidLabelOverlap: false,
-                    label: {
-                        emphasis: {
-                            show: true,
-                            textStyle: {
-                                fontSize: '30',
-                                fontWeight: 'bold'
-                            }
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/admin/data/category',
+            success: function (backData) {
+                console.log(backData);
+                var data = [];
+                var data2 = [];
+                for (var i = 0; i < backData.date.length; i++) {
+                    data.push(backData.date[i].name);
+                    data2.push({ value: backData.date[i].articles, name: backData.date[i].name })
+                }
+                var myChart1 = echarts.init(document.getElementById('pie_show'));
+                optionCricle = {
+                    title: {
+                        text: '分类文章数量比',
+                        left: 'center',
+                        textStyle: {
+                            fontSize: 14,
                         }
                     },
-                    data: [
-                        { value: 335, name: '爱生活' },
-                        { value: 310, name: '趣美味' },
-                        { value: 234, name: '爱旅行' },
-                        { value: 135, name: '爱电影' },
-                        { value: 548, name: '爱游泳' }
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b}: {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'horizontal',
+                        x: 'center',
+                        top: 20,
+                        data: data,
+                    },
+                    series: [
+                        {
+                            name: '分类名称',
+                            type: 'pie',
+                            radius: ['50%', '70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontSize: '15',
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: data2
+                        }
                     ]
-                }
-            ]
-        };
-        // 使用刚指定的配置项和数据显示图表。
-        myChart1.setOption(option1);
+                };
+                // 使用刚指定的配置项和数据显示图表。
+                myChart1.setOption(optionCricle);
+            }
+        })
+
+
     </script>
+
     <!-- 柱状图 -->
     <script>
         // 基于准备好的dom，初始化echarts实例
-        var myChart2 = echarts.init(document.getElementById('column_show'));
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/admin/data/visit',
+            success: function (backData) {
+               // console.log(backData);
+                var dataKey = Object.keys(backData.data);
+                var dataNum = Object.values(backData.data);
+                //console.log(dataKey);
+                //console.log(dataNum);
+                var arrTit = ['product'];
+                arrTit = arrTit.concat(dataKey);
+                console.log(arrTit);
+                
+                var arrMou = [];
+                var arrBig = [];
+                for (var i = 0; i < dataNum.length; i++) {
+                    arrMou.push(dataKey[i]);
+                    arrMou.push(dataNum[i]);
+                    arrBig.push(arrMou);
+                    arrMou = [];
+                };
 
-        option2 = {
-            title: {
-                left: 'center',
-                text: '分类访问量',
-            },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
-                },
-
-            },
-            legend: {
-                data: ['爱生活', '趣美味', '爱旅行', '爱电影', '爱游泳'],
-                top: 30
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: ['一月', '二月', '三月', '四月']
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-            color: ['#5885e8', '#13cfd5', '#00ce68', '#ff9565', '#20ff19'],
-            series: [
-                {
-                    name: '爱生活',
-                    type: 'bar',
-                    data: [320, 332, 301, 334]
-                },
-                {
-                    name: '趣美味',
-                    type: 'bar',
-                    data: [220, 132, 101, 134]
-                },
-                {
-                    name: '爱旅行',
-                    type: 'bar',
-                    data: [220, 182, 191, 234]
-                },
-                {
-                    name: '爱电影',
-                    type: 'bar',
-                    data: [150, 232, 201, 154]
-                },
-                {
-                    name: '爱游泳',
-                    type: 'bar',
-                    data: [262, 118, 364, 426],
-                },
-
-            ]
-        };
+                console.log(arrBig);
 
 
-        // 使用刚指定的配置项和数据显示图表。
-        myChart2.setOption(option2);
+
+
+
+                var myChart2 = echarts.init(document.getElementById('column_show'));
+
+                optionColumnar = {
+                    title: {
+                        text: '分类文章数',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    legend: {
+                        top: 30
+                    },
+                    dataset: {
+                        dimensions: arrTit,
+                        source: arrBig,
+                    },
+                    xAxis: { type: 'category' },
+                    yAxis: {},
+                    // Declare several bar series, each will be mapped
+                    // to a column of dataset.source by default.
+                    series: [
+                        { type: 'bar' }
+                    ]
+                };
+
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart2.setOption(optionColumnar);
+
+
+            }
+        })
+
 
     </script>
 </body>

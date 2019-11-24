@@ -222,6 +222,7 @@
                 id: id,
             },
             success: function (backData) {
+                console.log(backData);
                 $('.article_title').text(backData.data.title);
                 var resHtml = template('subheading_temp', backData);
                 $('.article_info').html(resHtml);

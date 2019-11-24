@@ -3,7 +3,6 @@ $(function () {
     $.ajax({
         url: BigNew.category_list,
         success: function (backData) {
-
             var resHtml = template("sel_temp", backData);
             $('#selCategory').html(resHtml);
         }
@@ -16,6 +15,7 @@ $(function () {
             visiblePages: 7,
             onPageClick: function (event, page) {
                 getArticle(page, null);
+                mypage = page;
             }
         })
     });
@@ -32,11 +32,14 @@ $(function () {
                 perpage: 2,
             },
             success: function (backData) {
-
                 var resHtml = template("article_temp", backData);
                 $('tbody').html(resHtml);
-                if (callback != null) {
+                if (backData.data.data.length !=0 && callback != null) {
                     callback(backData);
+                }else if(backData.data.data.length == 0 && backData.data.totalPage == mypage - 1) {
+                    console.log(backData.data.totalPage);
+                    mypage -= 1;
+                    $('#pagination').twbsPagination('changeTotalPages',backData.data.totalPage, mypage);
                 }
             }
         })
@@ -53,7 +56,6 @@ $(function () {
     //删除事件
     $('tbody').on('click', '.delete', function () {
         var id = $(this).attr('data-id');
-        console.log(id);
         $.ajax({
             type: 'post',
             url: BigNew.article_delete,
@@ -63,12 +65,9 @@ $(function () {
             success: function (backData) {
                 if (backData.code == 204) {
                     getArticle(mypage, function (backData) {
-                        console.log(backData);
-                        
                         //删除了部分数据,那总页数就有可能发生了改变
                         //调用changeTotalPages 这个方法 根据新的总页数 重新生成分页结构. 
-                        $('#pagination-demo').twbsPagination('changeTotalPages',backData.data.totalPage, mypage);
-                            console.log(mypage);
+                        $('#pagination').twbsPagination('changeTotalPages',backData.data.totalPage, mypage);
                     });
                 }
 
